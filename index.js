@@ -14,7 +14,7 @@ app.get("/health", (req, res) => {
 });
 
 app.get("/version", (req, res) => {
-    res.send(version)--;
+    res.send(version);
 });
 
 // Only start the server if this file is run directly
