@@ -10,10 +10,10 @@ import fs from "fs";
 const version = fs.readFileSync("VERSION", "utf8").trim();
 
 const pool = new Pool({
-    host: "postgres",
-    user: "postgres",
-    password: "postgres",
-    database: "postgres",
+    host: process.env.PG_HOST || "localhost",
+    user: process.env.PG_USER || "postgres",
+    password: process.env.PG_PASSWORD || "postgres",
+    database: process.env.PG_DB || "postgres",
 });
 
 app.get("/db", async (req, res) => {

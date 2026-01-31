@@ -6,10 +6,10 @@ services:
     ports:
       - "3500:3500"
     environment:
-      - PG_HOST=localhost
+      - PG_HOST=db
       - PG_USER=postgres
       - PG_PASSWORD=postgres
-      - PG_DB=postgres
+      - PG_DB=#786Allahis1
     depends_on:
       - db
     networks:
