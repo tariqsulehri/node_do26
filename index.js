@@ -5,8 +5,16 @@ export const app = express();
 
 app.use(express.json());
 
+import fs from "fs";
+
+const version = fs.readFileSync("VERSION", "utf8").trim();
+
 app.get("/health", (req, res) => {
-    res.send("OK");
+    res.send("healthy");
+});
+
+app.get("/version", (req, res) => {
+    res.send(version);
 });
 
 // Only start the server if this file is run directly
