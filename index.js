@@ -1,4 +1,6 @@
+import "dotenv/config";
 import express from "express";
+import { createClient } from "redis";
 import { Pool } from "pg";
 // Export the app for testing
 export const app = express();
@@ -16,6 +18,23 @@ const pool = new Pool({
     database: process.env.PG_DB || "postgres",
 });
 
+const redisClient = createClient({
+    url: process.env.REDIS_URL || "redis://localhost:6379",
+});
+
+redisClient.on("error", (err) => console.log("Redis Client Error", err));
+
+(async () => {
+    await redisClient.connect();
+    console.log("Connected to Redis");
+})();
+
+app.get("/cache", async (req, res) => {
+    const key = "hits";
+    const hits = await redisClient.incr(key);
+    res.json({ hits });
+});
+
 app.get("/db", async (req, res) => {
     const r = await pool.query("select now()");
     res.json(r.rows);
@@ -31,8 +50,9 @@ app.get("/version", (req, res) => {
 
 // Only start the server if this file is run directly
 if (process.argv[1] === import.meta.filename) {
-    app.listen(3500, () => {
-        console.log("Server started on port 3000");
+    const port = process.env.PORT || 3500;
+    app.listen(port, () => {
+        console.log(`Server started on port ${port}`);
     });
 }
 
