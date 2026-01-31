@@ -12,9 +12,12 @@ services:
       - PG_DB=#786Allahis1
     depends_on:
       - db
+      - redis
     networks:
       - app-network
 
+  redis:
+    image: redis:7
   db:
     image: postgres:16-alpine
     container_name: postgres
